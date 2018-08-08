@@ -13,7 +13,6 @@
 			buildPhases = (
 			);
 			dependencies = (
-				BFB04E3A0E521B6000B652B8 /* PBXTargetDependency */,
 				BF9257EB0C039F6C00D7A82A /* PBXTargetDependency */,
 			);
 			name = "Build All";
@@ -32,12 +31,6 @@
 		BF92580D0C03A02C00D7A82A /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF92580A0C03A02C00D7A82A /* ApplicationServices.framework */; };
 		BF92580E0C03A02C00D7A82A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF92580B0C03A02C00D7A82A /* CoreFoundation.framework */; };
 		BF92580F0C03A02C00D7A82A /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF92580C0C03A02C00D7A82A /* IOKit.framework */; };
-		BFA2A8DA0E4D018800574406 /* UserKernelShared.h in Headers */ = {isa = PBXBuildFile; fileRef = BF9257EE0C039FA200D7A82A /* UserKernelShared.h */; };
-		BFA2A8DB0E4D018800574406 /* SimpleDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = BF9257FC0C039FC200D7A82A /* SimpleDriver.h */; };
-		BFA2A8DC0E4D018800574406 /* SimpleUserClient.h in Headers */ = {isa = PBXBuildFile; fileRef = BF9257FE0C039FC200D7A82A /* SimpleUserClient.h */; };
-		BFA2A8E00E4D018800574406 /* SimpleDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF9257FB0C039FC200D7A82A /* SimpleDriver.cpp */; };
-		BFA2A8E10E4D018800574406 /* SimpleUserClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF9257FD0C039FC200D7A82A /* SimpleUserClient.cpp */; };
-		BFDED52E0E4D088200B31172 /* SimpleDriver_10_4.kext in CopyFiles */ = {isa = PBXBuildFile; fileRef = BFA2A8E70E4D018800574406 /* SimpleDriver_10_4.kext */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,34 +41,7 @@
 			remoteGlobalIDString = BF9257DF0C039F3300D7A82A;
 			remoteInfo = SimpleUserClientTool;
 		};
-		BFA2A8FE0E4D046100574406 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 32D94FC30562CBF700B6AF17;
-			remoteInfo = SimpleUserClient;
-		};
-		BFB04E390E521B6000B652B8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BFA2A8D80E4D018800574406;
-			remoteInfo = SimpleUserClient_10.4;
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		BFDED52B0E4D085A00B31172 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = SimpleDriver.kext/Contents/PlugIns;
-			dstSubfolderSpec = 16;
-			files = (
-				BFDED52E0E4D088200B31172 /* SimpleDriver_10_4.kext in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		32D94FD00562CBF700B6AF17 /* SimpleDriver.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDriver.kext; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,7 +58,6 @@
 		BF92580A0C03A02C00D7A82A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		BF92580B0C03A02C00D7A82A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		BF92580C0C03A02C00D7A82A /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		BFA2A8E70E4D018800574406 /* SimpleDriver_10_4.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleDriver_10_4.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFDED5240E4D06B100B31172 /* Info-SimpleUserClient_10.4.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-SimpleUserClient_10.4.plist"; sourceTree = "<group>"; };
 		BFDED5260E4D06BB00B31172 /* Info-SimpleUserClient.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-SimpleUserClient.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -112,13 +77,6 @@
 				BF92580D0C03A02C00D7A82A /* ApplicationServices.framework in Frameworks */,
 				BF92580E0C03A02C00D7A82A /* CoreFoundation.framework in Frameworks */,
 				BF92580F0C03A02C00D7A82A /* IOKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFA2A8E20E4D018800574406 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,7 +107,6 @@
 			isa = PBXGroup;
 			children = (
 				32D94FD00562CBF700B6AF17 /* SimpleDriver.kext */,
-				BFA2A8E70E4D018800574406 /* SimpleDriver_10_4.kext */,
 				BF9257E00C039F3300D7A82A /* SimpleUserClientTool */,
 			);
 			name = Products;
@@ -210,16 +167,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BFA2A8D90E4D018800574406 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BFA2A8DA0E4D018800574406 /* UserKernelShared.h in Headers */,
-				BFA2A8DB0E4D018800574406 /* SimpleDriver.h in Headers */,
-				BFA2A8DC0E4D018800574406 /* SimpleUserClient.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -258,27 +205,6 @@
 			productReference = BF9257E00C039F3300D7A82A /* SimpleUserClientTool */;
 			productType = "com.apple.product-type.tool";
 		};
-		BFA2A8D80E4D018800574406 /* SimpleUserClient_10.4 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BFA2A8E40E4D018800574406 /* Build configuration list for PBXNativeTarget "SimpleUserClient_10.4" */;
-			buildPhases = (
-				BFA2A8D90E4D018800574406 /* Headers */,
-				BFA2A8DF0E4D018800574406 /* Sources */,
-				BFA2A8E20E4D018800574406 /* Frameworks */,
-				BFA2A8E30E4D018800574406 /* Rez */,
-				BFDED52B0E4D085A00B31172 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BFA2A8FF0E4D046100574406 /* PBXTargetDependency */,
-			);
-			name = SimpleUserClient_10.4;
-			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-			productName = SimpleUserClient;
-			productReference = BFA2A8E70E4D018800574406 /* SimpleDriver_10_4.kext */;
-			productType = "com.apple.product-type.kernel-extension.iokit";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -299,7 +225,6 @@
 			targets = (
 				BF9257E70C039F6200D7A82A /* Build All */,
 				32D94FC30562CBF700B6AF17 /* SimpleUserClient */,
-				BFA2A8D80E4D018800574406 /* SimpleUserClient_10.4 */,
 				BF9257DF0C039F3300D7A82A /* SimpleUserClientTool */,
 			);
 		};
@@ -307,13 +232,6 @@
 
 /* Begin PBXRezBuildPhase section */
 		32D94FCC0562CBF700B6AF17 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFA2A8E30E4D018800574406 /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -341,15 +259,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BFA2A8DF0E4D018800574406 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BFA2A8E00E4D018800574406 /* SimpleDriver.cpp in Sources */,
-				BFA2A8E10E4D018800574406 /* SimpleUserClient.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -357,16 +266,6 @@
 			isa = PBXTargetDependency;
 			target = BF9257DF0C039F3300D7A82A /* SimpleUserClientTool */;
 			targetProxy = BF9257EA0C039F6C00D7A82A /* PBXContainerItemProxy */;
-		};
-		BFA2A8FF0E4D046100574406 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 32D94FC30562CBF700B6AF17 /* SimpleUserClient */;
-			targetProxy = BFA2A8FE0E4D046100574406 /* PBXContainerItemProxy */;
-		};
-		BFB04E3A0E521B6000B652B8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BFA2A8D80E4D018800574406 /* SimpleUserClient_10.4 */;
-			targetProxy = BFB04E390E521B6000B652B8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -438,12 +337,6 @@
 		BF9257F10C039FA200D7A82A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-					ppc64,
-					x86_64,
-				);
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -461,12 +354,6 @@
 		BF9257F20C039FA200D7A82A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-					ppc64,
-					x86_64,
-				);
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -497,52 +384,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				PRODUCT_NAME = "Build All";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		BFA2A8E50E4D018800574406 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INFOPLIST_FILE = "Info-SimpleUserClient_10.4.plist";
-				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "$(GCC_PREPROCESSOR_DEFINITIONS)";
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				MODULE_NAME = com.apple.dts.driver.SimpleDriver_10_4;
-				MODULE_VERSION = 2.0;
-				OTHER_CFLAGS = "";
-				PRODUCT_NAME = SimpleDriver_10_4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				WRAPPER_EXTENSION = kext;
-				ZERO_LINK = NO;
-			};
-			name = Debug;
-		};
-		BFA2A8E60E4D018800574406 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CURRENT_PROJECT_VERSION = 2.0;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				INFOPLIST_FILE = "Info-SimpleUserClient_10.4.plist";
-				INFOPLIST_PREPROCESS = YES;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				MODULE_NAME = com.apple.dts.driver.SimpleDriver_10_4;
-				MODULE_VERSION = 2.0;
-				OTHER_CFLAGS = "";
-				PRODUCT_NAME = SimpleDriver_10_4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				WRAPPER_EXTENSION = kext;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -582,15 +423,6 @@
 			buildConfigurations = (
 				BF9257F70C039FA200D7A82A /* Debug */,
 				BF9257F80C039FA200D7A82A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BFA2A8E40E4D018800574406 /* Build configuration list for PBXNativeTarget "SimpleUserClient_10.4" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BFA2A8E50E4D018800574406 /* Debug */,
-				BFA2A8E60E4D018800574406 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
