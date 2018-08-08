@@ -59,23 +59,9 @@ kern_return_t MyOpenUserClient(io_connect_t connect)
     // This calls the openUserClient method in SimpleUserClient inside the kernel. Though not mandatory, it's good
     // practice to use open and close semantics in your driver to prevent multiple user space applications from
     // using your driver at the same time.
-    
-	kern_return_t	kernResult;
-	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallScalarMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		kernResult = IOConnectCallScalarMethod(connect, kMyUserClientOpen, NULL, 0, NULL, NULL);
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult = IOConnectMethodScalarIScalarO(connect, kMyUserClientOpen, 0, 0);
-	}    
-#endif
-    
+
+	kern_return_t kernResult = IOConnectCallScalarMethod(connect, kMyUserClientOpen, NULL, 0, NULL, NULL);
+
 	return kernResult;
 }
 
@@ -84,22 +70,8 @@ kern_return_t MyCloseUserClient(io_connect_t connect)
 {
     // This calls the closeUserClient method in SimpleUserClient inside the kernel, which in turn closes
 	// the driver.
-    
-	kern_return_t	kernResult;
-	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallScalarMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		kernResult = IOConnectCallScalarMethod(connect, kMyUserClientClose, NULL, 0, NULL, NULL);
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult = IOConnectMethodScalarIScalarO(connect, kMyUserClientClose, 0, 0);
-	}    
-#endif
+
+	kern_return_t kernResult = IOConnectCallScalarMethod(connect, kMyUserClientClose, NULL, 0, NULL, NULL);
 
     return kernResult;
 }
@@ -112,39 +84,21 @@ kern_return_t MyScalarIStructureI(io_connect_t connect, const uint32_t scalarI,
 	    
 	kern_return_t	kernResult;
 	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		uint64_t scalarI_64 = scalarI;
+	uint64_t scalarI_64 = scalarI;
 
-		kernResult = IOConnectCallMethod(connect,						// an io_connect_t returned from IOServiceOpen().
-										 kMyScalarIStructIMethod,		// selector of the function to be called via the user client.
-										 &scalarI_64,					// array of scalar (64-bit) input values.
-										 1,								// the number of scalar input values.
-										 structI,						// a pointer to the struct input parameter.
-										 structISize,					// the size of the input structure parameter.
-										 NULL,							// array of scalar (64-bit) output values.
-										 NULL,							// pointer to the number of scalar output values.
-										 NULL,							// pointer to the struct output parameter.
-										 NULL							// pointer to the size of the output structure parameter.
-										 );
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult =
-			IOConnectMethodScalarIStructureI(connect,					// an io_connect_t returned from IOServiceOpen().
-											 kMyScalarIStructIMethod,	// Index to the function to be called via the user client.
-											 1,							// the number of scalar (32-bit) input values.
-											 structISize,				// the size of the input structure parameter.
-											 scalarI,					// a scalar input parameter.
-											 structI					// pointer to the struct input parameter.
-											 );
-	}
-#endif
-    
+	kernResult = IOConnectCallMethod(
+		connect,						// an io_connect_t returned from IOServiceOpen().
+		kMyScalarIStructIMethod,		// selector of the function to be called via the user client.
+		&scalarI_64,					// array of scalar (64-bit) input values.
+		1,								// the number of scalar input values.
+		structI,						// a pointer to the struct input parameter.
+		structISize,					// the size of the input structure parameter.
+		NULL,							// array of scalar (64-bit) output values.
+		NULL,							// pointer to the number of scalar output values.
+		NULL,							// pointer to the struct output parameter.
+		NULL							// pointer to the size of the output structure parameter.
+		);
+
     return kernResult;
 }
 
@@ -156,43 +110,24 @@ kern_return_t MyScalarIStructureO(io_connect_t connect, const uint32_t scalarI_1
 
 	kern_return_t	kernResult;
 	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		uint64_t	scalarI_64[2];
-		
-		scalarI_64[0] = scalarI_1;
-		scalarI_64[1] = scalarI_2;
-		
-		kernResult = IOConnectCallMethod(connect,						// an io_connect_t returned from IOServiceOpen().
-										 kMyScalarIStructOMethod,		// selector of the function to be called via the user client.
-										 scalarI_64,					// array of scalar (64-bit) input values.
-										 2,								// the number of scalar input values.
-										 NULL,							// a pointer to the struct input parameter.
-										 0,								// the size of the input structure parameter.
-										 NULL,							// array of scalar (64-bit) output values.
-										 NULL,							// pointer to the number of scalar output values.
-										 structO,						// pointer to the struct output parameter.
-										 structOSize					// pointer to the size of the output structure parameter.
-										 );
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult =
-			IOConnectMethodScalarIStructureO(connect,					// an io_connect_t returned from IOServiceOpen().
-											 kMyScalarIStructOMethod,	// an index to the function to be called via the user client.
-											 2,							// the number of scalar input values.
-											 structOSize,				// the size of the struct output parameter.
-											 scalarI_1,					// a scalar input parameter.
-											 scalarI_2,					// another scalar input parameter.
-											 structO					// a pointer to a struct output parameter.
-											 );
-	}
-#endif
-        
+	uint64_t	scalarI_64[2];
+
+	scalarI_64[0] = scalarI_1;
+	scalarI_64[1] = scalarI_2;
+
+	kernResult = IOConnectCallMethod(
+		connect,						// an io_connect_t returned from IOServiceOpen().
+		kMyScalarIStructOMethod,		// selector of the function to be called via the user client.
+		scalarI_64,						// array of scalar (64-bit) input values.
+		2,								// the number of scalar input values.
+		NULL,							// a pointer to the struct input parameter.
+		0,								// the size of the input structure parameter.
+		NULL,							// array of scalar (64-bit) output values.
+		NULL,							// pointer to the number of scalar output values.
+		structO,						// pointer to the struct output parameter.
+		structOSize					// pointer to the size of the output structure parameter.
+		);
+
     return kernResult;
 }
 
@@ -200,45 +135,26 @@ kern_return_t MyScalarIStructureO(io_connect_t connect, const uint32_t scalarI_1
 kern_return_t MyScalarIScalarO(io_connect_t connect, const uint32_t scalarI_1, const uint32_t scalarI_2, uint32_t* scalarO)
 {
     // This calls the function ScalarIScalarO in SimpleUserClient inside the kernel.
-    
+
 	kern_return_t	kernResult;
 	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallScalarMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		uint64_t	scalarI_64[2];
-		uint64_t	scalarO_64;
-		uint32_t	outputCount = 1; 
-		
-		scalarI_64[0] = scalarI_1;
-		scalarI_64[1] = scalarI_2;
-		
-		kernResult = IOConnectCallScalarMethod(connect,					// an io_connect_t returned from IOServiceOpen().
-											   kMyScalarIScalarOMethod,	// selector of the function to be called via the user client.
-											   scalarI_64,				// array of scalar (64-bit) input values.
-											   2,						// the number of scalar input values.
-											   &scalarO_64,				// array of scalar (64-bit) output values.
-											   &outputCount				// pointer to the number of scalar output values.
-											   );
-											   
-		*scalarO = (uint32_t) scalarO_64;
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult =
-			IOConnectMethodScalarIScalarO(connect,						// an io_connect_t returned from IOServiceOpen().
-										  kMyScalarIScalarOMethod,		// an index to the function to be called via the user client.
-										  2,							// the number of scalar input values.
-										  1,							// the number of scalar output values.
-										  scalarI_1,					// a scalar input parameter.
-										  scalarI_2,					// another scalar input parameter.
-										  scalarO						// a scalar output parameter.
-										  );
-	}
-#endif
+	uint64_t	scalarI_64[2];
+	uint64_t	scalarO_64;
+	uint32_t	outputCount = 1;
+
+	scalarI_64[0] = scalarI_1;
+	scalarI_64[1] = scalarI_2;
+
+	kernResult = IOConnectCallScalarMethod(
+		connect,					// an io_connect_t returned from IOServiceOpen().
+		kMyScalarIScalarOMethod,	// selector of the function to be called via the user client.
+		scalarI_64,					// array of scalar (64-bit) input values.
+		2,							// the number of scalar input values.
+		&scalarO_64,				// array of scalar (64-bit) output values.
+		&outputCount				// pointer to the number of scalar output values.
+		);
+
+	*scalarO = (uint32_t) scalarO_64;
 
     return kernResult;
 }
@@ -249,34 +165,14 @@ kern_return_t MyStructureIStructureO(io_connect_t connect, const size_t structIS
 {
     // This calls the function StructureIStructureO in SimpleUserClient inside the kernel.
     
-	kern_return_t	kernResult;
-	
-#if !defined(__LP64__)
-	// Check if Mac OS X 10.5 API is available...
-	if (IOConnectCallStructMethod != NULL) {
-		// ...and use it if it is.
-#endif
-		kernResult = IOConnectCallStructMethod(connect,						// an io_connect_t returned from IOServiceOpen().
-											   kMyStructIStructOMethod,		// selector of the function to be called via the user client.
-											   structI,						// pointer to the input struct parameter.
-											   structISize,					// the size of the input structure parameter.
-											   structO,						// pointer to the output struct parameter.
-											   structOSize					// pointer to the size of the output structure parameter.
-											   );
-#if !defined(__LP64__)
-	}
-	else {
-		// Otherwise fall back to older API.
-		kernResult =
-			IOConnectMethodStructureIStructureO(connect,					// an io_connect_t returned from IOServiceOpen().
-												kMyStructIStructOMethod,	// an index to the function to be called via the user client.
-												structISize,				// the size of the input struct paramter.
-												structOSize,				// a pointer to the size of the output struct paramter.
-												(MySampleStruct*) structI,	// a pointer to the input struct parameter.
-												structO						// a pointer to the output struct parameter.
-												);
-	}
-#endif
+	kern_return_t kernResult = IOConnectCallStructMethod(
+		connect,						// an io_connect_t returned from IOServiceOpen().
+		kMyStructIStructOMethod,		// selector of the function to be called via the user client.
+		structI,						// pointer to the input struct parameter.
+		structISize,					// the size of the input structure parameter.
+		structO,						// pointer to the output struct parameter.
+		structOSize					// pointer to the size of the output structure parameter.
+		);
 
     return kernResult;
 }
