@@ -60,20 +60,6 @@
 // prior to Mac OS X 10.5. Code targeting 10.5 and later should use AvailabilityMacros.h
 // instead of this file. Code targeting 10.6 and later should use Availability.h
 
-#ifndef MAC_OS_X_VERSION_MIN_REQUIRED
-
-#ifndef MAC_OS_X_VERSION_10_4
-#define MAC_OS_X_VERSION_10_4 1040
-#endif
-
-#ifdef __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
-#define MAC_OS_X_VERSION_MIN_REQUIRED __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
-#else
-#define MAC_OS_X_VERSION_MIN_REQUIRED MAC_OS_X_VERSION_10_4
-#endif
-
-#endif
-
 #include <IOKit/IOService.h>
 #include "UserKernelShared.h"
 
@@ -86,12 +72,8 @@ class SimpleDriverClassName : public IOService
 	// version has to be built as a separate kext. This is because the KPIs for 64-bit user processes
 	// to access user clients only exist on Mac OS X 10.5 and later.
 	
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-	OSDeclareDefaultStructors(com_apple_dts_driver_SimpleDriver_10_4)
-#else
 	OSDeclareDefaultStructors(com_apple_dts_driver_SimpleDriver)
-#endif
-	
+
 public:
 	// IOService methods
 	virtual bool init(OSDictionary* dictionary = 0);

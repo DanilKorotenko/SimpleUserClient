@@ -62,11 +62,7 @@
 // Even though we are defining the convenience macro super for the superclass, you must use the actual class name
 // in the OS*MetaClass macros. Note that the class name is different when supporting Mac OS X 10.4.
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-OSDefineMetaClassAndStructors(com_apple_dts_driver_SimpleDriver_10_4, IOService)
-#else
 OSDefineMetaClassAndStructors(com_apple_dts_driver_SimpleDriver, IOService)
-#endif
 
 bool SimpleDriverClassName::start(IOService* provider)
 {

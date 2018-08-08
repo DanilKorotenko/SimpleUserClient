@@ -65,105 +65,8 @@
 // Even though we are defining the convenience macro super for the superclass, you must use the actual class name
 // in the OS*MetaClass macros. Note that the class name is different when supporting Mac OS X 10.4.
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-OSDefineMetaClassAndStructors(com_apple_dts_driver_SimpleUserClient_10_4, IOUserClient)
-#else
 OSDefineMetaClassAndStructors(com_apple_dts_driver_SimpleUserClient, IOUserClient)
-#endif
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-// Sentinel values for the method dispatch table
-enum {
-    kMethodObjectThis = 0,
-    kMethodObjectProvider
-};
-
-
-// User client method dispatch table.
-//
-// The user client mechanism is designed to allow calls from a user process to be dispatched to
-// any IOService-based object in the kernel. Almost always this mechanism is used to dispatch calls to
-// either member functions of the user client itself or of the user client's provider. The provider is
-//  the driver which the user client is connecting to the user process.
-//
-// While this sample shows one case of dispatching calls directly to the driver (ScalarIScalarO),
-// it is recommended that calls be dispatched to the user client. This allows the user client to perform
-// error checking on the parameters before passing them to the driver. It also allows the user client to
-// do any endian-swapping of parameters in the cross-endian case. (See ScalarIStructI below for further
-// discussion of this subject.)
-//
-// The dispatch table makes use of the sentinel values kMethodObjectThis and kMethodObjectProvider to
-// represent at compile time the values of the this pointer and fProvider respectively at run time.  
-const IOExternalMethod SimpleUserClientClassName::sMethods[kNumberOfMethods] = {
-	{   // kMyUserClientOpen
-		(IOService *) kMethodObjectThis,									// Target object is this user client.
-		(IOMethod) &SimpleUserClientClassName::openUserClient,				// Method pointer.
-		kIOUCScalarIScalarO,												// Scalar Input, Scalar Output.
-		0,																	// No scalar input values.
-		0																	// No scalar output values.
-	},
-	{   // kMyUserClientClose
-		(IOService *) kMethodObjectThis,									// Target object is this user client.
-		(IOMethod) &SimpleUserClientClassName::closeUserClient,				// Method pointer.
-		kIOUCScalarIScalarO,												// Scalar Input, Scalar Output.
-		0,																	// No scalar input values.
-		0																	// No scalar output values.
-	},
-	{   // kMyScalarIStructIMethod
-		(IOService *) kMethodObjectThis,									// Target object is this user client.
-		(IOMethod) &SimpleUserClientClassName::ScalarIStructI,				// Method pointer.
-		kIOUCScalarIStructI,												// Scalar Input, Struct Input.
-		1,																	// One scalar input value.
-		sizeof(MySampleStruct)												// The size of the input struct.
-	},
-	{   // kMyScalarIStructOMethod
-		(IOService *) kMethodObjectThis,									// Target object is this user client.
-		(IOMethod) &SimpleUserClientClassName::ScalarIStructO,				// Method pointer.
-		kIOUCScalarIStructO,												// Scalar Input, Struct Output.
-		2,																	// Two scalar input values.
-		sizeof(MySampleStruct)												// The size of the output struct.
-	},
-	{   // kMyScalarIScalarOMethod
-		(IOService *) kMethodObjectProvider,								// Target object is this user client's provider
-																			// (the driver).
-		(IOMethod) &SimpleDriverClassName::ScalarIScalarO,					// Method pointer.
-		kIOUCScalarIScalarO,												// Scalar Input, Scalar Output.
-		2,																	// Two scalar input values.
-		1																	// One scalar output value.
-	},
-	{   // kMyStructIStructOMethod
-		(IOService *) kMethodObjectThis,									// Target object is this user client.
-		(IOMethod) &SimpleUserClientClassName::StructIStructO,				// Method pointer.
-		kIOUCStructIStructO,												// Struct Input, Struct Output.
-		sizeof(MySampleStruct),												// The size of the input struct.
-		sizeof(MySampleStruct)												// The size of the output struct.
-	}
-};
-    
-// Look up the external methods - supply a description of the parameters 
-// available to be called.
-//
-// This is the legacy approach which only supports 32-bit user processes.
-IOExternalMethod* SimpleUserClientClassName::getTargetAndMethodForIndex(IOService** target, UInt32 index)
-{
-	IOLog("%s[%p]::%s(%p, %ld)\n", getName(), this, __FUNCTION__, target, index);
-    
-    // Make sure that the index of the function we're calling actually exists in the function table.
-    if (index < (UInt32) kNumberOfMethods) {
-		if (sMethods[index].object == (IOService *) kMethodObjectThis) {
-			*target = this;	   
-        }
-		else {
-			*target = fProvider;	   
-		}
-		return (IOExternalMethod *) &sMethods[index];
-    }
-	else {
-		*target = NULL;
-		return NULL;
-	}
-}
-#else
 // This is the technique which supports both 32-bit and 64-bit user processes starting with Mac OS X 10.5.
 //
 // User client method dispatch table.
@@ -245,7 +148,6 @@ IOReturn SimpleUserClientClassName::externalMethod(uint32_t selector, IOExternal
         
 	return super::externalMethod(selector, arguments, dispatch, target, reference);
 }
-#endif
 
 
 // There are two forms of IOUserClient::initWithTask, the second of which accepts an additional OSDictionary* parameter.
@@ -418,12 +320,10 @@ bool SimpleUserClientClassName::finalize(IOOptionBits options)
 }
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sOpenUserClient(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->openUserClient();
 }
-#endif
 
 IOReturn SimpleUserClientClassName::openUserClient(void)
 {
@@ -447,12 +347,10 @@ IOReturn SimpleUserClientClassName::openUserClient(void)
 }
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sCloseUserClient(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->closeUserClient();
 }
-#endif
 
 
 IOReturn SimpleUserClientClassName::closeUserClient(void)
@@ -480,14 +378,12 @@ IOReturn SimpleUserClientClassName::closeUserClient(void)
 }
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sScalarIStructI(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->ScalarIStructI((uint32_t) arguments->scalarInput[0],
 								  (MySampleStruct*) arguments->structureInput,
 								  (uint32_t) arguments->structureInputSize);
 }
-#endif
 
 
 IOReturn SimpleUserClientClassName::ScalarIStructI(uint32_t inNumber, MySampleStruct* inStruct, uint32_t inStructSize)
@@ -541,7 +437,6 @@ IOReturn SimpleUserClientClassName::ScalarIStructI(uint32_t inNumber, MySampleSt
 }
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sScalarIStructO(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->ScalarIStructO((uint32_t) arguments->scalarInput[0],
@@ -549,7 +444,6 @@ IOReturn SimpleUserClientClassName::sScalarIStructO(SimpleUserClientClassName* t
 								  (MySampleStruct*) arguments->structureOutput,
 								  (uint32_t*) &arguments->structureOutputSize);
 }
-#endif
 
 
 IOReturn SimpleUserClientClassName::ScalarIStructO(uint32_t inNumber1, uint32_t inNumber2,
@@ -591,17 +485,14 @@ IOReturn SimpleUserClientClassName::ScalarIStructO(uint32_t inNumber1, uint32_t 
 }
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sScalarIScalarO(SimpleDriverClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->ScalarIScalarO((uint32_t) arguments->scalarInput[0],
 								  (uint32_t) arguments->scalarInput[1],
 								  (uint32_t*) &arguments->scalarOutput[0]);
 }
-#endif
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_4
 IOReturn SimpleUserClientClassName::sStructIStructO(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments)
 {
     return target->StructIStructO((MySampleStruct*) arguments->structureInput,
@@ -609,7 +500,6 @@ IOReturn SimpleUserClientClassName::sStructIStructO(SimpleUserClientClassName* t
 								  (uint32_t) arguments->structureInputSize,
 								  (uint32_t*) &arguments->structureOutputSize);
 }
-#endif
 
 
 IOReturn SimpleUserClientClassName::StructIStructO(MySampleStruct* inStruct, MySampleStruct* outStruct,

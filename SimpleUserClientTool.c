@@ -262,7 +262,7 @@ int main(int argc, char* argv[])
     IOObjectRelease(iterator);
     
     // Repeat the test on any instances of the Mac OS X 10.4 version of the driver.
-    kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kSimpleDriverClassName_10_4), &iterator);
+    kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kSimpleDriverClassName), &iterator);
     
     if (kernResult != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kernResult);
@@ -271,7 +271,7 @@ int main(int argc, char* argv[])
 	
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
 		driverFound = true;
-		printf("Found a device of class "kSimpleDriverClassName_10_4".\n\n");
+		printf("Found a device of class "kSimpleDriverClassName".\n\n");
 		TestUserClient(service);
 	}
     
