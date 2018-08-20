@@ -63,7 +63,7 @@
 // and make the whole structure's size a multiple of 64 bits.
 
 typedef struct MySampleStruct {
-    uint64_t field1;	
+    uint64_t field1;
     uint64_t field2;
 } MySampleStruct;
 

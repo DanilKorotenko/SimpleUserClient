@@ -132,10 +132,10 @@ IOReturn SimpleUserClientClassName::externalMethod(uint32_t selector, IOExternal
 {
 	IOLog("%s[%p]::%s(%d, %p, %p, %p, %p)\n", getName(), this, __FUNCTION__,
 		  selector, arguments, dispatch, target, reference);
-        
+
     if (selector < (uint32_t) kNumberOfMethods) {
         dispatch = (IOExternalMethodDispatch *) &sMethods[selector];
-        
+
         if (!target) {
             if (selector == kMyScalarIScalarOMethod) {
 				target = fProvider;
@@ -145,7 +145,7 @@ IOReturn SimpleUserClientClassName::externalMethod(uint32_t selector, IOExternal
 			}
 		}
     }
-        
+
 	return super::externalMethod(selector, arguments, dispatch, target, reference);
 }
 
@@ -158,9 +158,9 @@ IOReturn SimpleUserClientClassName::externalMethod(uint32_t selector, IOExternal
 bool SimpleUserClientClassName::initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties)
 {
     bool	success;
-    
-	success = super::initWithTask(owningTask, securityToken, type, properties);	    
-	
+
+	success = super::initWithTask(owningTask, securityToken, type, properties);
+
 	// This IOLog must follow super::initWithTask because getName relies on the superclass initialization.
 	IOLog("%s[%p]::%s(%p, %p, %ld, %p)\n", getName(), this, __FUNCTION__, owningTask, securityToken, type, properties);
 
@@ -168,10 +168,10 @@ bool SimpleUserClientClassName::initWithTask(task_t owningTask, void* securityTo
 		// This code will do the right thing on both PowerPC- and Intel-based systems because the cross-endian
 		// property will never be set on PowerPC-based Macs. 
 		fCrossEndian = false;
-	
+
 		if (properties != NULL && properties->getObject(kIOUserClientCrossEndianKey)) {
 			// A connection to this user client is being opened by a user process running using Rosetta.
-			
+
 			// Indicate that this user client can handle being called from cross-endian user processes by 
 			// setting its IOUserClientCrossEndianCompatible property in the I/O Registry.
 			if (setProperty(kIOUserClientCrossEndianCompatibleKey, kOSBooleanTrue)) {
@@ -180,10 +180,10 @@ bool SimpleUserClientClassName::initWithTask(task_t owningTask, void* securityTo
 			}
 		}
 	}
-	
+
     fTask = owningTask;
     fProvider = NULL;
-        
+
     return success;
 }
 
@@ -192,21 +192,21 @@ bool SimpleUserClientClassName::initWithTask(task_t owningTask, void* securityTo
 bool SimpleUserClientClassName::start(IOService* provider)
 {
     bool	success;
-	
+
 	IOLog("%s[%p]::%s(%p)\n", getName(), this, __FUNCTION__, provider);
-    
+
     // Verify that this user client is being started with a provider that it knows
 	// how to communicate with.
 	fProvider = OSDynamicCast(SimpleDriverClassName, provider);
     success = (fProvider != NULL);
-    
+
     if (success) {
 		// It's important not to call super::start if some previous condition
 		// (like an invalid provider) would cause this function to return false. 
 		// I/O Kit won't call stop on an object if its start function returned false.
 		success = super::start(provider);
 	}
-	
+
     return success;
 }
 
@@ -215,7 +215,7 @@ bool SimpleUserClientClassName::start(IOService* provider)
 void SimpleUserClientClassName::stop(IOService* provider)
 {
 	IOLog("%s[%p]::%s(%p)\n", getName(), this, __FUNCTION__, provider);
-    
+
     super::stop(provider);
 }
 
@@ -224,11 +224,11 @@ void SimpleUserClientClassName::stop(IOService* provider)
 IOReturn SimpleUserClientClassName::clientClose(void)
 {
 	IOLog("%s[%p]::%s()\n", getName(), this, __FUNCTION__);
-    
+
     // Defensive coding in case the user process called IOServiceClose
 	// without calling closeUserClient first.
     (void) closeUserClient();
-    
+
 	// Inform the user process that this user client is no longer available. This will also cause the
 	// user client instance to be destroyed.
 	//
@@ -241,7 +241,7 @@ IOReturn SimpleUserClientClassName::clientClose(void)
 	}
 
     // DON'T call super::clientClose, which just returns kIOReturnUnsupported.
-    
+
     return kIOReturnSuccess;
 }
 
@@ -271,7 +271,7 @@ IOReturn SimpleUserClientClassName::clientDied(void)
 bool SimpleUserClientClassName::willTerminate(IOService* provider, IOOptionBits options)
 {
 	IOLog("%s[%p]::%s(%p, %ld)\n", getName(), this, __FUNCTION__, provider, options);
-	
+
 	return super::willTerminate(provider, options);
 }
 
@@ -281,12 +281,12 @@ bool SimpleUserClientClassName::willTerminate(IOService* provider, IOOptionBits 
 bool SimpleUserClientClassName::didTerminate(IOService* provider, IOOptionBits options, bool* defer)
 {
 	IOLog("%s[%p]::%s(%p, %ld, %p)\n", getName(), this, __FUNCTION__, provider, options, defer);
-	
+
 	// If all pending I/O has been terminated, close our provider. If I/O is still outstanding, set defer to true
 	// and the user client will not have stop called on it.
 	closeUserClient();
 	*defer = false;
-	
+
 	return super::didTerminate(provider, options, defer);
 }
 
@@ -296,12 +296,12 @@ bool SimpleUserClientClassName::didTerminate(IOService* provider, IOOptionBits o
 // willTerminate or didTerminate instead.
 bool SimpleUserClientClassName::terminate(IOOptionBits options)
 {
-    bool	success;
-    
+    bool success;
+
 	IOLog("%s[%p]::%s(%ld)\n", getName(), this, __FUNCTION__, options);
 
     success = super::terminate(options);
-    
+
     return success;
 }
 
@@ -311,11 +311,11 @@ bool SimpleUserClientClassName::terminate(IOOptionBits options)
 bool SimpleUserClientClassName::finalize(IOOptionBits options)
 {
     bool	success;
-    
+
 	IOLog("%s[%p]::%s(%ld)\n", getName(), this, __FUNCTION__, options);
-    
+
     success = super::finalize(options);
-    
+
     return success;
 }
 
@@ -328,9 +328,9 @@ IOReturn SimpleUserClientClassName::sOpenUserClient(SimpleUserClientClassName* t
 IOReturn SimpleUserClientClassName::openUserClient(void)
 {
     IOReturn	result = kIOReturnSuccess;
-	
+
 	IOLog("%s[%p]::%s()\n", getName(), this, __FUNCTION__);
-    
+
     if (fProvider == NULL || isInactive()) {
 		// Return an error if we don't have a provider. This could happen if the user process
 		// called openUserClient without calling IOServiceOpen first. Or, the user client could be
@@ -342,7 +342,7 @@ IOReturn SimpleUserClientClassName::openUserClient(void)
 		// and it doesn't support being opened by more than one client at a time.
 		result = kIOReturnExclusiveAccess;
 	}
-        
+
     return result;
 }
 
@@ -356,9 +356,9 @@ IOReturn SimpleUserClientClassName::sCloseUserClient(SimpleUserClientClassName* 
 IOReturn SimpleUserClientClassName::closeUserClient(void)
 {
     IOReturn	result = kIOReturnSuccess;
-	
+
 	IOLog("%s[%p]::%s()\n", getName(), this, __FUNCTION__);
-            
+
     if (fProvider == NULL) {
 		// Return an error if we don't have a provider. This could happen if the user process
 		// called closeUserClient without calling IOServiceOpen first. 
@@ -373,7 +373,7 @@ IOReturn SimpleUserClientClassName::closeUserClient(void)
 		result = kIOReturnNotOpen;
 		IOLog("%s[%p]::%s(): returning kIOReturnNotOpen.\n", getName(), this, __FUNCTION__);
 	}
-	
+
     return result;
 }
 
@@ -388,11 +388,11 @@ IOReturn SimpleUserClientClassName::sScalarIStructI(SimpleUserClientClassName* t
 
 IOReturn SimpleUserClientClassName::ScalarIStructI(uint32_t inNumber, MySampleStruct* inStruct, uint32_t inStructSize)
 {
-	IOReturn	result;
+	IOReturn result;
 
 	IOLog("%s[%p]::%s(inNumber = %d, field1 = %lld, field2 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__,
 		  inNumber, inStruct->field1, inStruct->field2, inStructSize);
-    
+
 	// Endian-swap structure parameters in the user client before passing them to the driver.
 	//
 	// This may require adding new functions to your user client and modifying the dispatch table in
@@ -402,7 +402,7 @@ IOReturn SimpleUserClientClassName::ScalarIStructI(uint32_t inNumber, MySampleSt
 	// each of which may or may not be cross-endian. It also avoids having to change the driver to make it cross-endian-aware.
 	//
 	// Note that fCrossEndian will always be false if running on a PowerPC-based Mac.
-	
+
 	if (fProvider == NULL || isInactive()) {
 		// Return an error if we don't have a provider. This could happen if the user process
 		// called ScalarIStructI without calling IOServiceOpen first. Or, the user client could be
@@ -429,10 +429,10 @@ IOReturn SimpleUserClientClassName::ScalarIStructI(uint32_t inNumber, MySampleSt
 			IOLog("%s[%p]::%s(after swap: inNumber = %d, field1 = %lld, field2 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__,
 				  inNumber, inStruct->field1, inStruct->field2, inStructSize);
 		}
-		
+
 		result = fProvider->ScalarIStructI(inNumber, inStruct, inStructSize);
 	}
-	
+
 	return result;
 }
 
@@ -505,7 +505,7 @@ IOReturn SimpleUserClientClassName::sStructIStructO(SimpleUserClientClassName* t
 IOReturn SimpleUserClientClassName::StructIStructO(MySampleStruct* inStruct, MySampleStruct* outStruct,
 												   uint32_t inStructSize, uint32_t* outStructSize)
 {
-	IOReturn	result;
+	IOReturn result;
 
 	IOLog("%s[%p]::%s(field1 = %lld, field2 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__,
 			inStruct->field1, inStruct->field2, inStructSize);
@@ -534,7 +534,7 @@ IOReturn SimpleUserClientClassName::StructIStructO(MySampleStruct* inStruct, MyS
 			IOLog("%s[%p]::%s(input after swap: field1 = %lld, field2 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__,
 				inStruct->field1, inStruct->field2, inStructSize);
 		}
-		
+
 		result = fProvider->StructIStructO(inStruct, outStruct, inStructSize, outStructSize);
 
 		if (fCrossEndian) {
@@ -546,6 +546,6 @@ IOReturn SimpleUserClientClassName::StructIStructO(MySampleStruct* inStruct, MyS
 				  outStruct->field1, outStruct->field2, *outStructSize);
 		}
 	}
-    
+
     return result;
 }

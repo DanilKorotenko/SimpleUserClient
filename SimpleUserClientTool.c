@@ -65,14 +65,14 @@ kern_return_t MyUserClientOpenExample(io_service_t service, io_connect_t *connec
     // This call will cause the user client to be instantiated. It returns an io_connect_t handle
 	// that is used for all subsequent calls to the user client.
     kern_return_t kernResult = IOServiceOpen(service, mach_task_self(), 0, connect);
-	
+
     if (kernResult != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kernResult);
     }
 	else {
 		// This is an example of calling our user client's openUserClient method.
 		kernResult = MyOpenUserClient(*connect);
-			
+
 		if (kernResult == KERN_SUCCESS) {
 			printf("MyOpenUserClient was successful.\n\n");
 		}
@@ -80,7 +80,7 @@ kern_return_t MyUserClientOpenExample(io_service_t service, io_connect_t *connec
 			fprintf(stderr, "MyOpenUserClient returned 0x%08x.\n\n", kernResult);
 		}
     }
-		
+
 	return kernResult;
 }
 
@@ -88,16 +88,16 @@ kern_return_t MyUserClientOpenExample(io_service_t service, io_connect_t *connec
 void MyUserClientCloseExample(io_connect_t connect)
 {
 	kern_return_t kernResult = MyCloseUserClient(connect);
-        
+
     if (kernResult == KERN_SUCCESS) {
         printf("MyCloseUserClient was successful.\n\n");
     }
 	else {
 		fprintf(stderr, "MyCloseUserClient returned 0x%08x.\n\n", kernResult);
 	}
-    
+
     kernResult = IOServiceClose(connect);
-    
+
     if (kernResult == KERN_SUCCESS) {
         printf("IOServiceClose was successful.\n\n");
     }
@@ -111,10 +111,10 @@ void MyScalarIStructureIExample(io_connect_t connect)
 {
     MySampleStruct	sampleStruct = { 586, 8756 };		// These are just a couple of random numbers.
     uint32_t		sampleNumber = 15;					// Another random number.
-    
-    kern_return_t kernResult = 
+
+    kern_return_t kernResult =
 		MyScalarIStructureI(connect, sampleNumber, sizeof(MySampleStruct), &sampleStruct);
-	    
+
     if (kernResult == KERN_SUCCESS) {
         printf("MyScalarIStructureI was successful.\n\n");
     }
@@ -130,10 +130,10 @@ void MyScalarIStructureOExample(io_connect_t connect)
     uint32_t		sampleNumber1 = 154;	// This number is random.
     uint32_t		sampleNumber2 = 863;	// This number is random.
     size_t			structSize = sizeof(MySampleStruct); 
-    
+
 	kern_return_t kernResult =
 		MyScalarIStructureO(connect, sampleNumber1, sampleNumber2, &structSize, &sampleStruct);
-        
+
     if (kernResult == KERN_SUCCESS) {
         printf("MyScalarIStructureO was successful.\n");
         printf("field1 = %lld, field2 = %lld, structSize = %lu\n\n", sampleStruct.field1, sampleStruct.field2, structSize);
@@ -149,10 +149,10 @@ void MyScalarIScalarOExample(io_connect_t connect)
     uint32_t	sampleNumber1 = 10;		// Random number with no meaning.
     uint32_t	sampleNumber2 = 32768;	// Another random number.
     uint32_t	resultNumber;
-    
+
 	kern_return_t kernResult =
 		MyScalarIScalarO(connect, sampleNumber1, sampleNumber2, &resultNumber);
-	
+
     if (kernResult == KERN_SUCCESS) {
         printf("MyScalarIScalarO was successful.\n");
         printf("resultNumber = %d\n\n", resultNumber);
@@ -169,10 +169,10 @@ void MyStructureIStructureOExample(io_connect_t connect)
     MySampleStruct	sampleStruct2;
     size_t			structSize1 = sizeof(MySampleStruct);
     size_t			structSize2 = sizeof(MySampleStruct);
-    
+
 	kern_return_t kernResult =
 		MyStructureIStructureO(connect, structSize1, &sampleStruct1, &structSize2, &sampleStruct2);    
-    
+
 	if (kernResult == KERN_SUCCESS) {
         printf("MyStructureIStructureO was successful.\n");
         printf("field1 = %lld, field2 = %lld, structSize = %lu\n\n", sampleStruct2.field1, sampleStruct2.field2, structSize2);
@@ -188,7 +188,7 @@ void MyLaunchConsoleApp()
     CFURLRef pathRef;
 
     pathRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, CFSTR(kMyPathToSystemLog), kCFURLPOSIXPathStyle, false);
-    
+
     if (pathRef) {
         LSOpenCFURLRef(pathRef, NULL);
         CFRelease(pathRef);
@@ -203,20 +203,20 @@ void TestUserClient(io_service_t service)
 
 	// Instantiate a connection to the user client.
 	kernResult = MyUserClientOpenExample(service, &connect);
-	
+
 	if (connect != IO_OBJECT_NULL) {	
 		// Pass a scalar (int) parameter and a struct parameter to the user client.
 		MyScalarIStructureIExample(connect);
 
 		// Pass two scalar parameters to the user client and get a struct parameter back.
 		MyScalarIStructureOExample(connect);
-		
+
 		// Pass two scalar parameters to the user client and get a scalar parameter back.
 		MyScalarIScalarOExample(connect);
-		
+
 		// Pass a struct parameter to the user client and get a struct parameter back.
 		MyStructureIStructureOExample(connect);
-		
+
 		// Close the user client and tear down the connection.
 		MyUserClientCloseExample(connect);
 	}
@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
     io_service_t	service;
     io_iterator_t 	iterator;
 	bool			driverFound = false;
-    
+
     // This will launch the Console.app so you can see the IOLogs from the kext.
     MyLaunchConsoleApp();
 
@@ -243,41 +243,41 @@ int main(int argc, char* argv[])
 	// This sample shows how to do this in the SimpleUserClient and SimpleUserClient_10.4 Xcode targets.
 	//
 	// From the userland perspective, a process must look for any of the class names it is prepared to talk to.
-	
+
     // This creates an io_iterator_t of all instances of our driver that exist in the I/O Registry.
     kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kSimpleDriverClassName), &iterator);
-    
+
     if (kernResult != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kernResult);
         return -1;
     }
-        
+
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
 		driverFound = true;
 		printf("Found a device of class "kSimpleDriverClassName".\n\n");
 		TestUserClient(service);
 	}
-    
+
     // Release the io_iterator_t now that we're done with it.
     IOObjectRelease(iterator);
-    
+
     // Repeat the test on any instances of the Mac OS X 10.4 version of the driver.
     kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kSimpleDriverClassName), &iterator);
-    
+
     if (kernResult != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kernResult);
         return -1;
     }
-	
+
     while ((service = IOIteratorNext(iterator)) != IO_OBJECT_NULL) {
 		driverFound = true;
 		printf("Found a device of class "kSimpleDriverClassName".\n\n");
 		TestUserClient(service);
 	}
-    
+
     // Release the io_iterator_t now that we're done with it.
     IOObjectRelease(iterator);
-    
+
 	if (driverFound == false) {
 		fprintf(stderr, "No matching drivers found.\n");
 	}

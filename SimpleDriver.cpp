@@ -67,16 +67,16 @@ OSDefineMetaClassAndStructors(com_apple_dts_driver_SimpleDriver, IOService)
 bool SimpleDriverClassName::start(IOService* provider)
 {
     bool	success;
-	
+
 	IOLog("%s[%p]::%s(%p)\n", getName(), this, __FUNCTION__, provider);
-    
+
     success = super::start(provider);
-	    
+
     if (success) {
 		// Publish ourselves so clients can find us
 		registerService();
 	}
-    
+
     return success;
 }
 
@@ -85,7 +85,7 @@ bool SimpleDriverClassName::start(IOService* provider)
 void SimpleDriverClassName::stop(IOService* provider)
 {
 	IOLog("%s[%p]::%s(%p)\n", getName(), this, __FUNCTION__, provider);
-    
+
     super::stop(provider);
 }
 
@@ -111,7 +111,7 @@ bool SimpleDriverClassName::init(OSDictionary* dictionary)
 void SimpleDriverClassName::free(void)
 {
 	IOLog("%s[%p]::%s()\n", getName(), this, __FUNCTION__);
-    
+
     super::free();
 }
 
@@ -122,7 +122,7 @@ void SimpleDriverClassName::free(void)
 IOService* SimpleDriverClassName::probe(IOService* provider, SInt32* score)
 {
 	IOLog("%s[%p]::%s(%p, %p)\n", getName(), this, __FUNCTION__, provider, score);
-        
+
     IOService *res = super::probe(provider, score);
 
     return res;
@@ -139,7 +139,7 @@ IOService* SimpleDriverClassName::probe(IOService* provider, SInt32* score)
 bool SimpleDriverClassName::willTerminate(IOService* provider, IOOptionBits options)
 {
 	IOLog("%s[%p]::%s(%p, %ld)\n", getName(), this, __FUNCTION__, provider, options);
-	
+
 	return super::willTerminate(provider, options);
 }
 
@@ -151,7 +151,7 @@ bool SimpleDriverClassName::willTerminate(IOService* provider, IOOptionBits opti
 bool SimpleDriverClassName::didTerminate(IOService* provider, IOOptionBits options, bool* defer)
 {
 	IOLog("%s[%p]::%s(%p, %ld, %p)\n", getName(), this, __FUNCTION__, provider, options, defer);
-	
+
 	return super::didTerminate(provider, options, defer);
 }
 
@@ -162,11 +162,11 @@ bool SimpleDriverClassName::didTerminate(IOService* provider, IOOptionBits optio
 bool SimpleDriverClassName::terminate(IOOptionBits options)
 {
     bool	success;
-    
+
 	IOLog("%s[%p]::%s(%ld)\n", getName(), this, __FUNCTION__, options);
 
     success = super::terminate(options);
-    
+
     return success;
 }
 
@@ -176,11 +176,11 @@ bool SimpleDriverClassName::terminate(IOOptionBits options)
 bool SimpleDriverClassName::finalize(IOOptionBits options)
 {
     bool	success;
-    
+
 	IOLog("%s[%p]::%s(%ld)\n", getName(), this, __FUNCTION__, options);
-    
+
     success = super::finalize(options);
-    
+
     return success;
 }
 
@@ -189,7 +189,7 @@ IOReturn SimpleDriverClassName::ScalarIStructI(uint32_t inNumber, MySampleStruct
 {
 	IOLog("%s[%p]::%s(inNumber = %d, field1 = %lld, field1 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__,
 		  inNumber, inStruct->field1, inStruct->field2, inStructSize);
-    
+
     return kIOReturnSuccess;
 }
 
@@ -197,15 +197,15 @@ IOReturn SimpleDriverClassName::ScalarIStructI(uint32_t inNumber, MySampleStruct
 IOReturn SimpleDriverClassName::ScalarIStructO(uint32_t inNumber1, uint32_t inNumber2, MySampleStruct* outStruct, uint32_t* outStructSize)
 {
 	IOLog("%s[%p]::%s(inNumber1 = %d, inNumber2 = %d)\n", getName(), this, __FUNCTION__, inNumber1, inNumber2);
-    
+
     // The scalars inNumber1 and inNumber2 are automatically endian-swapped by the user client mechanism.
 	// The user client will swap the fields in outStruct if necessary.
-	
+
 	// The output is simply the two input scalars copied to the output struct.
 	outStruct->field1 = inNumber1;
     outStruct->field2 = inNumber2;
     *outStructSize = sizeof(MySampleStruct);
-    
+
     return kIOReturnSuccess;
 }
 
@@ -213,10 +213,10 @@ IOReturn SimpleDriverClassName::ScalarIStructO(uint32_t inNumber1, uint32_t inNu
 IOReturn SimpleDriverClassName::ScalarIScalarO(uint32_t inNumber1, uint32_t inNumber2, uint32_t* outNumber)
 {
 	IOLog("%s[%p]::%s(inNumber1 = %d, inNumber2 = %d)\n", getName(), this, __FUNCTION__, inNumber1, inNumber2);
-    
+
     // The output is the product of the two input scalars.
 	*outNumber = inNumber1 * inNumber2;
-    
+
     return kIOReturnSuccess;
 }
 
@@ -225,12 +225,12 @@ IOReturn SimpleDriverClassName::StructIStructO(MySampleStruct* inStruct, MySampl
 {
 	IOLog("%s[%p]::%s(field1 = %lld, field2 = %lld, inStructSize = %d)\n", getName(), this, __FUNCTION__, 
 		  inStruct->field1, inStruct->field2, inStructSize);
-    
+
 	// The output is simply the fields from the input struct copied to the output struct.
 	outStruct->field1 = inStruct->field1;
     outStruct->field2 = inStruct->field2;
     *outStructSize = sizeof(MySampleStruct);
-    
+
     return kIOReturnSuccess;
 }
 

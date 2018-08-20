@@ -81,9 +81,9 @@ kern_return_t MyScalarIStructureI(io_connect_t connect, const uint32_t scalarI,
 								  const size_t structISize, const MySampleStruct* structI)
 {
     // This calls the function ScalarIStructI in SimpleUserClient inside the kernel.
-	    
+
 	kern_return_t	kernResult;
-	
+
 	uint64_t scalarI_64 = scalarI;
 
 	kernResult = IOConnectCallMethod(
@@ -109,7 +109,7 @@ kern_return_t MyScalarIStructureO(io_connect_t connect, const uint32_t scalarI_1
     // This calls the function ScalarIStructureO in SimpleUserClient inside the kernel.
 
 	kern_return_t	kernResult;
-	
+
 	uint64_t	scalarI_64[2];
 
 	scalarI_64[0] = scalarI_1;
@@ -137,7 +137,7 @@ kern_return_t MyScalarIScalarO(io_connect_t connect, const uint32_t scalarI_1, c
     // This calls the function ScalarIScalarO in SimpleUserClient inside the kernel.
 
 	kern_return_t	kernResult;
-	
+
 	uint64_t	scalarI_64[2];
 	uint64_t	scalarO_64;
 	uint32_t	outputCount = 1;
@@ -164,7 +164,7 @@ kern_return_t MyStructureIStructureO(io_connect_t connect, const size_t structIS
 									 size_t* structOSize, MySampleStruct* structO)
 {
     // This calls the function StructureIStructureO in SimpleUserClient inside the kernel.
-    
+
 	kern_return_t kernResult = IOConnectCallStructMethod(
 		connect,						// an io_connect_t returned from IOServiceOpen().
 		kMyStructIStructOMethod,		// selector of the function to be called via the user client.

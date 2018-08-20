@@ -74,7 +74,7 @@ public:
     // IOUserClient methods
     virtual void stop(IOService* provider);
     virtual bool start(IOService* provider);
-    
+
 	virtual bool initWithTask(task_t owningTask, void* securityToken, UInt32 type, OSDictionary* properties);
 
     virtual IOReturn clientClose(void);
@@ -82,11 +82,11 @@ public:
 
 	virtual bool willTerminate(IOService* provider, IOOptionBits options);
 	virtual bool didTerminate(IOService* provider, IOOptionBits options, bool* defer);
-	
+
     virtual bool terminate(IOOptionBits options = 0);
     virtual bool finalize(IOOptionBits options);
-	
-protected:	
+
+protected:
 
 	// KPI for supporting access from both 32-bit and 64-bit user processes beginning with Mac OS X 10.5.
 	virtual IOReturn externalMethod(uint32_t selector, IOExternalMethodArguments* arguments,
@@ -98,7 +98,7 @@ protected:
 
 	static IOReturn sCloseUserClient(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments);
     virtual IOReturn closeUserClient(void);
-    
+
 	static IOReturn sScalarIStructI(SimpleUserClientClassName* target, void* reference, IOExternalMethodArguments* arguments);
 	virtual IOReturn ScalarIStructI(uint32_t inNumber, MySampleStruct* inStruct, uint32_t inStructSize);
 

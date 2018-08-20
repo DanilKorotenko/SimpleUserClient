@@ -78,15 +78,15 @@ public:
 	// IOService methods
 	virtual bool init(OSDictionary* dictionary = 0);
 	virtual void free(void);
-	
+
 	virtual IOService* probe(IOService* provider, SInt32* score);
-	
+
 	virtual bool start(IOService* provider);
 	virtual void stop(IOService* provider);
-	
+
 	virtual bool willTerminate(IOService* provider, IOOptionBits options);
 	virtual bool didTerminate(IOService* provider, IOOptionBits options, bool* defer);
-	
+
     virtual bool terminate(IOOptionBits options = 0);
     virtual bool finalize(IOOptionBits options);
 
